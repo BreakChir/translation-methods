@@ -1,4 +1,11 @@
-*.exe
-*.cmi
-*.cmo
-*.mli
+recursive-parser/.gradle/
+recursive-parser/.idea/
+recursive-parser/build/
+recursive-parser/out/
+
+recursive-parser/*.iml
+recursive-parser/*.ipr
+recursive-parser/*.iws
+
+recursive-parser/gradlew
+recursive-parser/gradlew.bat
