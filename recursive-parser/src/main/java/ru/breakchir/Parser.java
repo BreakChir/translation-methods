@@ -11,14 +11,10 @@ public class Parser {
             case NOT:
             case LPAREN:
             case VAR:
-                // D
                 Tree subD = D();
-                // X'
                 Tree subXP = XPrime();
                 return new Tree("X", subD, subXP);
-            case RPAREN:
             case END:
-                // eps
                 return new Tree("X");
             default:
                 throw new AssertionError();
@@ -28,17 +24,15 @@ public class Parser {
     private Tree XPrime() throws ParseException {
         switch (lex.getCurToken()) {
             case XOR:
-                // ^
                 lex.nextToken();
-                // X
-                Tree subX = X();
-                return new Tree("X'", new Tree("^"), subX);
+                Tree subD = D();
+                Tree subXP = XPrime();
+                return new Tree("X'", new Tree("^"), subD, subXP);
             case RPAREN:
             case END:
-                // eps
                 return new Tree("X'");
             default:
-                throw new AssertionError();
+                throw new AssertionError(lex.getCurToken());
         }
     }
 
@@ -47,16 +41,9 @@ public class Parser {
             case NOT:
             case LPAREN:
             case VAR:
-                // D
                 Tree subC = C();
-                // X'
                 Tree subDP = DPrime();
                 return new Tree("D", subC, subDP);
-            case XOR:
-            case RPAREN:
-            case END:
-                // eps
-                return new Tree("D");
             default:
                 throw new AssertionError();
         }
@@ -65,15 +52,13 @@ public class Parser {
     private Tree DPrime() throws ParseException {
         switch (lex.getCurToken()) {
             case OR:
-                // |
                 lex.nextToken();
-                // D
-                Tree subD = D();
-                return new Tree("D'", new Tree("|"), subD);
+                Tree subC = C();
+                Tree subDP = DPrime();
+                return new Tree("D'", new Tree("|"), subC, subDP);
             case XOR:
             case RPAREN:
             case END:
-                // eps
                 return new Tree("D'");
             default:
                 throw new AssertionError();
@@ -85,17 +70,10 @@ public class Parser {
             case NOT:
             case LPAREN:
             case VAR:
-                // U
                 Tree subU = U();
-                // C'
                 Tree subCP = CPrime();
                 return new Tree("C", subU, subCP);
-            case OR:
-            case XOR:
             case RPAREN:
-            case END:
-                // eps
-                return new Tree("C");
             default:
                 throw new AssertionError();
         }
@@ -104,16 +82,14 @@ public class Parser {
     private Tree CPrime() throws ParseException {
         switch (lex.getCurToken()) {
             case AND:
-                // &
                 lex.nextToken();
-                // C
-                Tree subC = C();
-                return new Tree("C'", new Tree("&"), subC);
+                Tree subU = U();
+                Tree subCP = CPrime();
+                return new Tree("C'", new Tree("&"), subU, subCP);
             case OR:
             case XOR:
             case RPAREN:
             case END:
-                // eps
                 return new Tree("C'");
             default:
                 throw new AssertionError();
@@ -123,34 +99,21 @@ public class Parser {
     private Tree U() throws ParseException {
         switch (lex.getCurToken()) {
             case NOT:
-                // !
                 lex.nextToken();
-                // U
                 Tree subU = U();
                 return new Tree("U", new Tree("!"), subU);
             case LPAREN:
-                // (
                 lex.nextToken();
-                // X
                 Tree subX = X();
-                // )
                 if (lex.getCurToken() != Token.RPAREN) {
                     throw new ParseException(") expected at position", lex.getCurPos());
                 }
                 lex.nextToken();
                 return new Tree("U", new Tree("("), subX, new Tree(")"));
             case VAR:
-                // [a-z]
                 int var = lex.getCurChar();
                 lex.nextToken();
                 return new Tree("U", new Tree(String.valueOf((char) var)));
-            case AND:
-            case OR:
-            case XOR:
-            case RPAREN:
-            case END:
-                // eps
-                return new Tree("U");
             default:
                 throw new AssertionError();
         }
@@ -165,6 +128,10 @@ public class Parser {
     Tree parse(String expr) throws ParseException {
         lex = new LexicalAnalyzer(expr);
         lex.nextToken();
-        return X();
+        Tree p = X();
+        if (lex.getCurToken() != Token.END) {
+            throw new AssertionError(lex.getCurToken());
+        }
+        return p;
     }
 }
