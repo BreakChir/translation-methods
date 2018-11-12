@@ -38,8 +38,8 @@ public class Tester {
 
     @Test
     public void randomTestProgram() {
-        for (int i = 0; i < 5; i++) {
-            PrefixProgramGenerator generator = new PrefixProgramGenerator((i + 1) * 10);
+        for (int i = 0; i < 100; i++) {
+            PrefixProgramGenerator generator = new PrefixProgramGenerator(30);
             String test = generator.generateProgram();
             runTest(test, false);
         }

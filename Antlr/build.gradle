@@ -18,7 +18,7 @@ generateGrammarSource {
 }
 
 clean{
-    delete "generated-src"
+    delete "src/main/java"
 }
 
 idea {
