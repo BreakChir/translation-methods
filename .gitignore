@@ -1,11 +1,11 @@
-recursive-parser/.gradle/
-recursive-parser/.idea/
-recursive-parser/build/
-recursive-parser/out/
+*/.gradle/
+*/.idea/
+*/build/
+*/out/
 
-recursive-parser/*.iml
-recursive-parser/*.ipr
-recursive-parser/*.iws
+*/*.iml
+*/*.ipr
+*/*.iws
 
-recursive-parser/gradlew
-recursive-parser/gradlew.bat
+*/gradlew
+*/gradlew.bat
