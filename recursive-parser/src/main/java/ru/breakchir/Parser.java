@@ -23,7 +23,7 @@ public class Parser {
 
     private Tree XPrime() throws ParseException {
         switch (lex.getCurToken()) {
-            case XOR:
+            case OR:
                 lex.nextToken();
                 Tree subD = D();
                 Tree subXP = XPrime();
@@ -51,12 +51,12 @@ public class Parser {
 
     private Tree DPrime() throws ParseException {
         switch (lex.getCurToken()) {
-            case OR:
+            case XOR:
                 lex.nextToken();
                 Tree subC = C();
                 Tree subDP = DPrime();
                 return new Tree("D'", new Tree("|"), subC, subDP);
-            case XOR:
+            case OR:
             case RPAREN:
             case END:
                 return new Tree("D'");

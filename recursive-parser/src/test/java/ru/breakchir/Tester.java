@@ -12,7 +12,7 @@ public class Tester {
 
     @Test
     public void testSample() throws IOException, InterruptedException, ParseException {
-        String test = "a";
+        String test = "(!a | b) & a & (a | !(b ^ c))";
         runDrawTest(test, "Sample");
     }
 
