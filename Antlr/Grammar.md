@@ -21,9 +21,9 @@
 
 String | Token | String | Token | String | Token
 --- | --- | --- | --- | --- | ---
-+  | ***ADD***  | <  | ***LT***   | *if* | ***IF***
--  | ***SUB***  |*>* | ***GT***   | *true* | ***TRUE***
-*  | ***MUL***  | <= | ***LTEQ*** | *false* | ***FALSE***
+*+*  | ***ADD***  | <  | ***LT***   | *if* | ***IF***
+*-*  | ***SUB***  |*>* | ***GT***   | *true* | ***TRUE***
+  *  | ***MUL***  | <= | ***LTEQ*** | *false* | ***FALSE***
 /  | ***DIV***  | >= | ***GTEQ*** | *print* | ***PRINT***
 %  | ***MOD***  | == | ***EQ***   | *begin* | ***BEGIN***
 ** | ***POW***  | != | ***NQ***   | *end* | ***END***

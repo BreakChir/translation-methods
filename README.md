@@ -4,13 +4,13 @@
 
 ### Лабораторная работа по регулярным выражениям в Perl
 
-- [Условие](labs-description/perl-tasks.pdf)
+- [Условие](labs-description/01-perl-tasks.pdf)
 - [Решение](perl)
 
 ### Ручное построение нисходящих парсеров
 
 - Вариант: 4
-- [Условие](labs-description/recursive-parsing.pdf)
+- [Условие](labs-description/02-recursive-parsing.pdf)
 - [Решение](recursive-parser)
 
 ### Автоматические генераторы трансляторов
