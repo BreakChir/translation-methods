@@ -9,25 +9,25 @@ start returns [String v]
     ;
 
 set_expr [String space] returns [String v]
-    :   expr[space + "  ", false] { $v = $expr.v; }
-        ( expr[space + "  ", false]  { $v += $expr.v; }
+    :   expr[space + "  ", 0] { $v = $expr.v; }
+        ( expr[space + "  ", 0]  { $v += $expr.v; }
         )*
     ;
 
-expr [String space, boolean isElse] returns [String v]
-    :   BEGIN set_expr[isElse ? space + "  " : space]
-                { $v = isElse ? "\n  " : ""; }
-                { $v += space + "begin\n" + $set_expr.v + space + (isElse ? "  " : "") + "end;\n"; }
+expr [String space, int els] returns [String v]
+    :   BEGIN set_expr[els == 1 ? space + "  " : space]
+                { $v = els == 1 ? "\n  " : ""; }
+                { $v += space + "begin\n" + $set_expr.v + space + (els == 1 ? "  " : "") + (els == 2 ? "end\n" : "end;\n"); }
     |   PRINT arg
-                { $v = isElse ? "\n  " : ""; }
-                { $v += space + "writeln(" + $arg.v + ");\n"; }
+                { $v = els == 1 ? "\n  " : ""; }
+                { $v += space + "writeln(" + $arg.v + ")" + (els == 2 ? "\n" : ";\n"); }
     |   ASGN VAR arg
-                { $v = isElse ? "\n  " : ""; }
-                { $v += space + $VAR.text + " = " + $arg.v + ";\n"; }
-    |   IF b1 = bool_cond e1 = expr[space + "  ", false]
-                { $v = isElse ? " " : space; }
+                { $v = els == 1 ? "\n  " : ""; }
+                { $v += space + $VAR.text + " = " + $arg.v + (els == 2 ? "\n" : ";\n"); }
+    |   IF b1 = bool_cond e1 = expr[space + "  ", 2]
+                { $v = els == 1 ? " " : space; }
                 { $v += "if " + $b1.v + " then\n" + $e1.v; }
-        (e2 = expr[space, true]
+        (e2 = expr[space, 1]
                 { $v += space + "else" + $e2.v; }
         )?
     ;
@@ -106,7 +106,7 @@ PRINT  : 'print';
 BEGIN  : 'begin';
 END    : 'end';
 
-NUM    : '-'? ('1'..'9') ('0'..'9')* | '0';
+NUM    : ('-'? ('1'..'9') ('0'..'9')*) | '0';
 VAR    : ('a'..'z' | 'A'..'Z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
 
 WS     : [ \t\r\n] -> skip;

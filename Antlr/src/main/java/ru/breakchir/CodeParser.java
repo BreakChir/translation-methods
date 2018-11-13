@@ -165,7 +165,7 @@ public class CodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(21);
-			((Set_exprContext)_localctx).expr = expr(space + "  ", false);
+			((Set_exprContext)_localctx).expr = expr(space + "  ", 0);
 			 ((Set_exprContext)_localctx).v =  ((Set_exprContext)_localctx).expr.v; 
 			setState(28);
 			_errHandler.sync(this);
@@ -175,7 +175,7 @@ public class CodeParser extends Parser {
 					{
 					{
 					setState(23);
-					((Set_exprContext)_localctx).expr = expr(space + "  ", false);
+					((Set_exprContext)_localctx).expr = expr(space + "  ", 0);
 					 _localctx.v += ((Set_exprContext)_localctx).expr.v; 
 					}
 					} 
@@ -199,7 +199,7 @@ public class CodeParser extends Parser {
 
 	public static class ExprContext extends ParserRuleContext {
 		public String space;
-		public boolean isElse;
+		public int els;
 		public String v;
 		public Set_exprContext set_expr;
 		public ArgContext arg;
@@ -228,10 +228,10 @@ public class CodeParser extends Parser {
 			return getRuleContext(ExprContext.class,i);
 		}
 		public ExprContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public ExprContext(ParserRuleContext parent, int invokingState, String space, boolean isElse) {
+		public ExprContext(ParserRuleContext parent, int invokingState, String space, int els) {
 			super(parent, invokingState);
 			this.space = space;
-			this.isElse = isElse;
+			this.els = els;
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
@@ -244,8 +244,8 @@ public class CodeParser extends Parser {
 		}
 	}
 
-	public final ExprContext expr(String space,boolean isElse) throws RecognitionException {
-		ExprContext _localctx = new ExprContext(_ctx, getState(), space, isElse);
+	public final ExprContext expr(String space,int els) throws RecognitionException {
+		ExprContext _localctx = new ExprContext(_ctx, getState(), space, els);
 		enterRule(_localctx, 4, RULE_expr);
 		try {
 			setState(57);
@@ -257,9 +257,9 @@ public class CodeParser extends Parser {
 				setState(31);
 				match(BEGIN);
 				setState(32);
-				((ExprContext)_localctx).set_expr = set_expr(isElse ? space + "  " : space);
-				 ((ExprContext)_localctx).v =  isElse ? "\n  " : ""; 
-				 _localctx.v += space + "begin\n" + ((ExprContext)_localctx).set_expr.v + space + (isElse ? "  " : "") + "end;\n"; 
+				((ExprContext)_localctx).set_expr = set_expr(els == 1 ? space + "  " : space);
+				 ((ExprContext)_localctx).v =  els == 1 ? "\n  " : ""; 
+				 _localctx.v += space + "begin\n" + ((ExprContext)_localctx).set_expr.v + space + (els == 1 ? "  " : "") + (els == 2 ? "end\n" : "end;\n"); 
 				}
 				break;
 			case PRINT:
@@ -269,8 +269,8 @@ public class CodeParser extends Parser {
 				match(PRINT);
 				setState(37);
 				((ExprContext)_localctx).arg = arg();
-				 ((ExprContext)_localctx).v =  isElse ? "\n  " : ""; 
-				 _localctx.v += space + "writeln(" + ((ExprContext)_localctx).arg.v + ");\n"; 
+				 ((ExprContext)_localctx).v =  els == 1 ? "\n  " : ""; 
+				 _localctx.v += space + "writeln(" + ((ExprContext)_localctx).arg.v + ")" + (els == 2 ? "\n" : ";\n"); 
 				}
 				break;
 			case ASGN:
@@ -282,8 +282,8 @@ public class CodeParser extends Parser {
 				((ExprContext)_localctx).VAR = match(VAR);
 				setState(43);
 				((ExprContext)_localctx).arg = arg();
-				 ((ExprContext)_localctx).v =  isElse ? "\n  " : ""; 
-				 _localctx.v += space + (((ExprContext)_localctx).VAR!=null?((ExprContext)_localctx).VAR.getText():null) + " = " + ((ExprContext)_localctx).arg.v + ";\n"; 
+				 ((ExprContext)_localctx).v =  els == 1 ? "\n  " : ""; 
+				 _localctx.v += space + (((ExprContext)_localctx).VAR!=null?((ExprContext)_localctx).VAR.getText():null) + " = " + ((ExprContext)_localctx).arg.v + (els == 2 ? "\n" : ";\n"); 
 				}
 				break;
 			case IF:
@@ -294,8 +294,8 @@ public class CodeParser extends Parser {
 				setState(48);
 				((ExprContext)_localctx).b1 = bool_cond();
 				setState(49);
-				((ExprContext)_localctx).e1 = expr(space + "  ", false);
-				 ((ExprContext)_localctx).v =  isElse ? " " : space; 
+				((ExprContext)_localctx).e1 = expr(space + "  ", 2);
+				 ((ExprContext)_localctx).v =  els == 1 ? " " : space; 
 				 _localctx.v += "if " + ((ExprContext)_localctx).b1.v + " then\n" + ((ExprContext)_localctx).e1.v; 
 				setState(55);
 				_errHandler.sync(this);
@@ -303,7 +303,7 @@ public class CodeParser extends Parser {
 				case 1:
 					{
 					setState(52);
-					((ExprContext)_localctx).e2 = expr(space, true);
+					((ExprContext)_localctx).e2 = expr(space, 1);
 					 _localctx.v += space + "else" + ((ExprContext)_localctx).e2.v; 
 					}
 					break;
