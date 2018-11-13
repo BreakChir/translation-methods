@@ -24,12 +24,13 @@ expr [String space, int els] returns [String v]
     |   ASGN VAR arg
                 { $v = els == 1 ? "\n  " : ""; }
                 { $v += space + $VAR.text + " = " + $arg.v + (els == 2 ? "\n" : ";\n"); }
-    |   IF b1 = bool_cond e1 = expr[space + "  ", 2]
+    |   IF b1 = bool_cond e1 = expr[space + "  ", 2] e2 = expr[space, 1]
                 { $v = els == 1 ? " " : space; }
                 { $v += "if " + $b1.v + " then\n" + $e1.v; }
-        (e2 = expr[space, 1]
                 { $v += space + "else" + $e2.v; }
-        )?
+    |   IF b1 = bool_cond e1 = expr[space + "  ", 0]
+                { $v = els == 1 ? " " : space; }
+                { $v += "if " + $b1.v + " then\n" + $e1.v; }
     ;
 
 arg returns [String v]

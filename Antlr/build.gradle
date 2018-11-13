@@ -14,15 +14,15 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "64m"
-    outputDirectory = new File("src/main/java")
+    outputDirectory = new File("src/main/java/parser")
 }
 
 clean{
-    delete "src/main/java"
+    delete "src/main/java/parser"
 }
 
 idea {
     module {
-        sourceDirs += file("src/main/java")
+        sourceDirs += file("src/main/java/parser")
     }
 }
