@@ -1,5 +1,5 @@
 grammar Code;
-
+//TODO перед else убрать ;
 @header {
     package ru.breakchir;
 }
@@ -99,17 +99,14 @@ NQ     : '!=';
 ASGN   : '=';
 
 IF     : 'if';
-ELSE   : 'else';
 TRUE   : 'true';
 FALSE  : 'false';
 PRINT  : 'print';
 
-OPEN   : '(';
-CLOSE  : ')';
 BEGIN  : 'begin';
 END    : 'end';
 
 NUM    : '-'? ('1'..'9') ('0'..'9')* | '0';
-VAR    : ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*;
+VAR    : ('a'..'z' | 'A'..'Z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
 
 WS     : [ \t\r\n] -> skip;

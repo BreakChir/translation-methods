@@ -14,7 +14,7 @@ public class Tester {
 
     @Test
     public void testSimple() {
-        String test = "if true = x 3 if true = x 4 if true = x 5 = x 6";
+        String test = "if true = x 3 if true = x 4 if true = x_a 5 = x 6";
         runTest(test, true);
     }
 
