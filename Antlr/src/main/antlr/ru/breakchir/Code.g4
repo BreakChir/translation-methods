@@ -1,81 +1,78 @@
 grammar Code;
-//TODO перед else убрать ;
+
 @header {
     package ru.breakchir;
 }
 
-start returns [String v]
-    :   set_expr[""] { $v = "begin\n" + $set_expr.v + "end."; }
+start returns [Program v]
+    :   set_expr[0] { $v = new Program($set_expr.v); }
     ;
 
-set_expr [String space] returns [String v]
-    :   expr[space + "  ", 0] { $v = $expr.v; }
-        ( expr[space + "  ", 0]  { $v += $expr.v; }
+set_expr [int spaceCount] returns [ExpressionList v]
+    :   expr[spaceCount + 1, 0]
+                { List<Expression> list = new ArrayList<>(); }
+                { list.add($expr.v); }
+        ( expr[spaceCount + 1, 0]
+                { list.add($expr.v); }
         )*
+                { $v = new ExpressionList(list); }
     ;
 
-expr [String space, int els] returns [String v]
-    :   BEGIN set_expr[els == 1 ? space + "  " : space]
-                { $v = els == 1 ? "\n  " : ""; }
-                { $v += space + "begin\n" + $set_expr.v + space + (els == 1 ? "  " : "") + (els == 2 ? "end\n" : "end;\n"); }
+expr [int spaceCount, int els] returns [Expression v]
+    :   BEGIN set_expr[els == 1 ? spaceCount + 1 : spaceCount]
+                { $v = new BeginStatement($set_expr.v, spaceCount, els); }
     |   PRINT arg
-                { $v = els == 1 ? "\n  " : ""; }
-                { $v += space + "writeln(" + $arg.v + ")" + (els == 2 ? "\n" : ";\n"); }
+                { $v = new Print($arg.v, spaceCount, els); }
     |   ASGN VAR arg
-                { $v = els == 1 ? "\n  " : ""; }
-                { $v += space + $VAR.text + " = " + $arg.v + (els == 2 ? "\n" : ";\n"); }
-    |   IF b1 = bool_cond e1 = expr[space + "  ", 2] e2 = expr[space, 1]
-                { $v = els == 1 ? " " : space; }
-                { $v += "if " + $b1.v + " then\n" + $e1.v; }
-                { $v += space + "else" + $e2.v; }
-    |   IF b1 = bool_cond e1 = expr[space + "  ", 0]
-                { $v = els == 1 ? " " : space; }
-                { $v += "if " + $b1.v + " then\n" + $e1.v; }
+                { $v = new Assignment($VAR.text, $arg.v, spaceCount, els); }
+    |   IF b1 = bool_cond e1 = expr[spaceCount + 1, 2] e2 = expr[spaceCount, 1]
+                { $v = new StatementIfElse($b1.v, $e1.v, $e2.v, spaceCount, els); }
+    |   IF b1 = bool_cond e1 = expr[spaceCount + 1, 0]
+                { $v = new StatementIf($b1.v, $e1.v, spaceCount, els); }
     ;
 
-arg returns [String v]
+arg returns [Argument v]
     :   bool_cond { $v = $bool_cond.v; }
     |   num       { $v = $num.v; }
-    |   VAR       { $v = $VAR.text; }
     ;
 
-bool_cond returns [String v]
-    :   bool_cmp b1 = bool_cond b2 = bool_cond { $v = "(" + $b1.v + $bool_cmp.v + $b2.v + ")"; }
-    |   NOT bool_cond                          { $v = "!" + $bool_cond.v; }
-    |   TRUE                                   { $v = "true"; }
-    |   FALSE                                  { $v = "false"; }
-    |   VAR                                    { $v = $VAR.text; }
-    |   int_cmp n1 = num n2 = num              { $v = "(" + $n1.v + $int_cmp.v + $n2.v + ")"; }
+bool_cond returns [BooleanExpression v]
+    :   bool_cmp b1 = bool_cond b2 = bool_cond { $v = new TwoBoolExpression($bool_cmp.v, $b1.v, $b2.v); }
+    |   NOT bool_cond                          { $v = new Negate($bool_cond.v); }
+    |   TRUE                                   { $v = new BoolValue("true"); }
+    |   FALSE                                  { $v = new BoolValue("false"); }
+    |   VAR                                    { $v = new Variable($VAR.text); }
+    |   int_cmp n1 = num n2 = num              { $v = new TwoCmpArExpression($int_cmp.v, $n1.v, $n2.v); }
     ;
 
-num returns [String v]
-    : int_op m1 = num m2 = num { $v = "(" + $m1.v + $int_op.v + $m2.v + ")"; }
-    | NUM                      { $v = $NUM.text; }
-    | VAR                      { $v = $VAR.text; }
+num returns [ArithmeticExpression v]
+    : int_op m1 = num m2 = num { $v = new TwoArExpression($int_op.v, $m1.v, $m2.v); }
+    | NUM                      { $v = new Number($NUM.text); }
+    | VAR                      { $v = new Variable($VAR.text); }
     ;
 
-bool_cmp returns [String v]
-    :   AND { $v = " && "; }
-    |   XOR { $v = " ^ "; }
-    |   OR  { $v = " || "; }
+bool_cmp returns [ExprToken v]
+    :   AND { $v = ExprToken.AND; }
+    |   XOR { $v = ExprToken.XOR; }
+    |   OR  { $v = ExprToken.OR;  }
     ;
 
-int_cmp returns [String v]
-    :   LT   { $v = " < "; }
-    |   GT   { $v = " > "; }
-    |   LTEQ { $v = " <= "; }
-    |   GTEQ { $v = " >= "; }
-    |   EQ   { $v = " == "; }
-    |   NQ   { $v = " != "; }
+int_cmp returns [ExprToken v]
+    :   LT   { $v = ExprToken.LT;   }
+    |   GT   { $v = ExprToken.GT;   }
+    |   LTEQ { $v = ExprToken.LTEQ; }
+    |   GTEQ { $v = ExprToken.GTEQ; }
+    |   EQ   { $v = ExprToken.EQ;   }
+    |   NQ   { $v = ExprToken.NQ;   }
     ;
 
-int_op returns [String v]
-    : ADD { $v = " + "; }
-    | SUB { $v = " - "; }
-    | MUL { $v = " * "; }
-    | DIV { $v = " / "; }
-    | MOD { $v = " % "; }
-    | POW { $v = " ** "; }
+int_op returns [ExprToken v]
+    : ADD { $v = ExprToken.ADD; }
+    | SUB { $v = ExprToken.SUB; }
+    | MUL { $v = ExprToken.MUL; }
+    | DIV { $v = ExprToken.DIV; }
+    | MOD { $v = ExprToken.MOD; }
+    | POW { $v = ExprToken.POW; }
     ;
 
 ADD    : '+';

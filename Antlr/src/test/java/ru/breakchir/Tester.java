@@ -19,7 +19,7 @@ public class Tester {
     }
 
     @Test
-    public void testMainExpr() {
+    public void testMainBody() {
         String test = "= x 5 = x 6 print 5 if < 4 5 print 5 print 4 = a 8 = a 9 begin = b -1 print b";
         runTest(test, true);
     }
@@ -55,10 +55,12 @@ public class Tester {
         CodeLexer lexer = new CodeLexer(CharStreams.fromString(test));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CodeParser parser = new CodeParser(tokens);
-        String program = parser.start().v;
+        Program program = parser.start().v;
         if (isPrint) {
+            StringBuilder builder = new StringBuilder();
+            program.append(builder);
             System.out.println(test);
-            System.out.println(program);
+            System.out.println(builder.toString());
             System.out.println();
         }
     }
