@@ -19,6 +19,12 @@ public class Tester {
     }
 
     @Test
+    public void testMainExpr() {
+        String test = "= x 5 = x 6 print 5 if < 4 5 print 5 print 4 = a 8 = a 9 begin = b -1 print b";
+        runTest(test, true);
+    }
+
+    @Test
     public void randomTestNum() {
         for (int i = 0; i < 100; i++) {
             PrefixNumGenerator generator = new PrefixNumGenerator((i + 1) * 10);
@@ -39,7 +45,7 @@ public class Tester {
     @Test
     public void randomTestProgram() {
         for (int i = 0; i < 100; i++) {
-            PrefixProgramGenerator generator = new PrefixProgramGenerator(30);
+            PrefixProgramGenerator generator = new PrefixProgramGenerator(15, (i + 2) * 100);
             String test = generator.generateProgram();
             runTest(test, false);
         }

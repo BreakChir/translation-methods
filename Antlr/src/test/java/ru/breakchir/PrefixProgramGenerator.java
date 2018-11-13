@@ -5,14 +5,14 @@ import java.util.Random;
 public class PrefixProgramGenerator {
     private StringBuilder builder;
     private Random random;
-    PrefixNumGenerator numGenerator;
-    PrefixBoolGenerator boolGenerator;
+    private PrefixNumGenerator numGenerator;
+    private PrefixBoolGenerator boolGenerator;
     private int balance;
     private int maxLength;
 
-    PrefixProgramGenerator(int maxLength) {
+    PrefixProgramGenerator(int maxLength, int rand) {
         builder = new StringBuilder();
-        random = new Random(maxLength);
+        random = new Random(rand);
         numGenerator = new PrefixNumGenerator(4);
         boolGenerator = new PrefixBoolGenerator(4);
         balance = 0;
