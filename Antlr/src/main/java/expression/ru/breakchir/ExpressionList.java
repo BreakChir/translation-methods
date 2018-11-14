@@ -14,9 +14,9 @@ public class ExpressionList {
         return expressions;
     }
 
-    public void append(StringBuilder builder) {
+    public void append(StringBuilder builder, int level) {
         for (Expression expr : expressions) {
-            expr.append(builder);
+            expr.append(builder, level, false, false);
         }
     }
 }

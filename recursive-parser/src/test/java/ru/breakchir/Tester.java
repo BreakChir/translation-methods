@@ -69,84 +69,38 @@ public class Tester {
         runTest(test);
     }
 
-    @Test(expected = Exception.class)
-    public void testIllegal1() throws Exception {
-        runFailTest("a + b - d");
+    @Test
+    public void testIllegalInput() throws Exception {
+        String[] tests = {
+                "a + b - d",
+                "!x & d | b * c",
+                "!(d & c) | a b =",
+                "!!x & a | b)))"
+        };
+        for (String test : tests)
+            runFailTest(test);
     }
 
-    @Test(expected = Exception.class)
-    public void testIllegal2() throws Exception {
-        runFailTest("!x & d | b * c");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIllegal3() throws Exception {
-        runFailTest("!(d & c) | a b =");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect1() throws Exception {
-        runFailTest("a || b & c");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect2() throws Exception {
-        runFailTest("!!x & a | (b & c");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect3() throws Exception {
-        runFailTest("b)");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect4() throws Exception {
-        runFailTest("!!x & a | b)))");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect5() throws Exception {
-        runFailTest("!!x & () | b");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect6() throws Exception {
-        runFailTest("x ! a");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect7() throws Exception {
-        runFailTest( "x !& a");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect8() throws Exception {
-        runFailTest("x () c");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect9() throws Exception {
-        runFailTest("x &");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect10() throws Exception {
-        runFailTest("x |");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect11() throws Exception {
-        runFailTest("x ^");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect12() throws Exception {
-        runFailTest("& x");
-    }
-
-    @Test(expected = Exception.class)
-    public void testIncorrect13() throws Exception {
-        runFailTest("d | (d) | (e & a ^ a | (c) ^ (!a) | c) | b) | (!e) ^ (!a ^ (c))");
+    @Test
+    public void testIncorrectInput() throws Exception {
+        String[] tests = {
+                "a || b & c",
+                "!!x & a | (b & c",
+                "b)))",
+                "!!x & a | b)))",
+                "!!x & () | b",
+                "x !& a",
+                "x ! a",
+                "x () c",
+                "x &",
+                "x |",
+                "x ^",
+                "& x",
+                "|a",
+                "d | (d) | (e & a ^ a | (c) ^ (!a) | c) | b) | (!e) ^ (!a ^ (c))"
+        };
+        for (String test : tests)
+            runFailTest(test);
     }
 
     @Test
@@ -162,8 +116,9 @@ public class Tester {
         try {
             parser.parse(testString);
         } catch (AssertionError | ParseException e) {
-            throw new Exception("Exception in test: " + testString);
+            return;
         }
+        throw new Exception("Expected fail in test: " + testString);
     }
 
     private void runTest(String testString) throws ParseException {

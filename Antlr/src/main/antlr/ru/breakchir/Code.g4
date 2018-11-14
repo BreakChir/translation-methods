@@ -5,30 +5,32 @@ grammar Code;
 }
 
 start returns [Program v]
-    :   set_expr[0] { $v = new Program($set_expr.v); }
+    :   set_expr { $v = new Program($set_expr.v); }
     ;
 
-set_expr [int spaceCount] returns [ExpressionList v]
-    :   expr[spaceCount + 1, 0]
-                { List<Expression> list = new ArrayList<>(); }
+set_expr returns [ExpressionList v]
+    :   expr    { List<Expression> list = new ArrayList<>(); }
                 { list.add($expr.v); }
-        ( expr[spaceCount + 1, 0]
-                { list.add($expr.v); }
+        (expr   { list.add($expr.v); }
         )*
                 { $v = new ExpressionList(list); }
     ;
 
-expr [int spaceCount, int els] returns [Expression v]
-    :   BEGIN set_expr[els == 1 ? spaceCount + 1 : spaceCount]
-                { $v = new BeginStatement($set_expr.v, spaceCount, els); }
+expr returns [Expression v]
+    :   BEGIN set_expr
+                { $v = new BeginStatement($set_expr.v); }
     |   PRINT arg
-                { $v = new Print($arg.v, spaceCount, els); }
+                { $v = new Print($arg.v); }
     |   ASGN VAR arg
-                { $v = new Assignment($VAR.text, $arg.v, spaceCount, els); }
-    |   IF b1 = bool_cond e1 = expr[spaceCount + 1, 2] e2 = expr[spaceCount, 1]
-                { $v = new StatementIfElse($b1.v, $e1.v, $e2.v, spaceCount, els); }
-    |   IF b1 = bool_cond e1 = expr[spaceCount + 1, 0]
-                { $v = new StatementIf($b1.v, $e1.v, spaceCount, els); }
+                { $v = new Assignment($VAR.text, $arg.v); }
+    |   IF b1 = bool_cond e1 = expr e2 = expr2
+                { $v = $e2.v == null ? new StatementIf($b1.v, $e1.v)
+                : new StatementIfElse($b1.v, $e1.v, $e2.v); }
+    ;
+
+expr2 returns [Expression v]
+    : expr  { $v = $expr.v; }
+    |       { $v = null; }
     ;
 
 arg returns [Argument v]

@@ -4,27 +4,23 @@ public class Assignment implements Expression {
 
     private Argument arg;
     private String var;
-    private int spaceCount;
-    private int els;
 
-    public Assignment(String var, Argument arg, int spaceCount, int els) {
+    public Assignment(String var, Argument arg) {
         this.var = var;
         this.arg = arg;
-        this.spaceCount = spaceCount;
-        this.els = els;
     }
 
-    public void append(StringBuilder builder) {
-        if (els == 1) {
-            builder.append(System.lineSeparator()).append("  ");
+    public void append(StringBuilder builder, int level, boolean willElse, boolean isElse) {
+        if (isElse) {
+            builder.append(System.lineSeparator());
         }
-        for (int i = 0; i < spaceCount; i++) {
+        for (int i = 0; i < level; i++) {
             builder.append("  ");
         }
         builder.append(var);
         builder.append(" = ");
         arg.append(builder);
-        if (els != 2) {
+        if (!willElse) {
             builder.append(';');
         }
         builder.append(System.lineSeparator());

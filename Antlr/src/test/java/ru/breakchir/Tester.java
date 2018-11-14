@@ -13,8 +13,8 @@ public class Tester {
     }
 
     @Test
-    public void testSimple() {
-        String test = "if true = x 3 if true = x 4 if true = x_a 5 = x 6";
+    public void testIf() {
+        String test = "if true if true if true if true if true if true if true = y 6= x 6 if false = z 6 = a 6 = b 6";
         runTest(test, true);
     }
 
@@ -45,9 +45,9 @@ public class Tester {
     @Test
     public void randomTestProgram() {
         for (int i = 0; i < 100; i++) {
-            PrefixProgramGenerator generator = new PrefixProgramGenerator(15, (i + 2) * 100);
+            PrefixProgramGenerator generator = new PrefixProgramGenerator(10, (i + 2) * 100);
             String test = generator.generateProgram();
-            runTest(test, false);
+            runTest(test, true);
         }
     }
 

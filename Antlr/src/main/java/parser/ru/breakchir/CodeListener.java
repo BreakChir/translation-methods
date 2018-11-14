@@ -40,6 +40,16 @@ public interface CodeListener extends ParseTreeListener {
 	 */
 	void exitExpr(CodeParser.ExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CodeParser#expr2}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr2(CodeParser.Expr2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link CodeParser#expr2}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr2(CodeParser.Expr2Context ctx);
+	/**
 	 * Enter a parse tree produced by {@link CodeParser#arg}.
 	 * @param ctx the parse tree
 	 */
