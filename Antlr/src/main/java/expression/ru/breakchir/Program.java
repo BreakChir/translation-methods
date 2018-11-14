@@ -8,7 +8,7 @@ public class Program {
         this.list = list;
     }
 
-    public String toString() {
+    public String toPascal() {
         StringBuilder builder = new StringBuilder();
         builder.append("begin").append(System.lineSeparator());
         list.append(builder, 0);

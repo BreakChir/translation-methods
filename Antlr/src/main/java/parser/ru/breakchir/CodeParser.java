@@ -23,11 +23,11 @@ public class CodeParser extends Parser {
 		LT=11, GT=12, LTEQ=13, GTEQ=14, EQ=15, NQ=16, ASGN=17, IF=18, TRUE=19, 
 		FALSE=20, PRINT=21, BEGIN=22, END=23, NUM=24, VAR=25, WS=26;
 	public static final int
-		RULE_start = 0, RULE_set_expr = 1, RULE_expr = 2, RULE_expr2 = 3, RULE_arg = 4, 
+		RULE_start = 0, RULE_set_expr = 1, RULE_expr = 2, RULE_exprElse = 3, RULE_arg = 4, 
 		RULE_bool_cond = 5, RULE_num = 6, RULE_bool_cmp = 7, RULE_int_cmp = 8, 
 		RULE_int_op = 9;
 	public static final String[] ruleNames = {
-		"start", "set_expr", "expr", "expr2", "arg", "bool_cond", "num", "bool_cmp", 
+		"start", "set_expr", "expr", "exprElse", "arg", "bool_cond", "num", "bool_cmp", 
 		"int_cmp", "int_op"
 	};
 
@@ -204,7 +204,7 @@ public class CodeParser extends Parser {
 		public Token VAR;
 		public Bool_condContext b1;
 		public ExprContext e1;
-		public Expr2Context e2;
+		public ExprElseContext e2;
 		public TerminalNode BEGIN() { return getToken(CodeParser.BEGIN, 0); }
 		public Set_exprContext set_expr() {
 			return getRuleContext(Set_exprContext.class,0);
@@ -222,8 +222,8 @@ public class CodeParser extends Parser {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public Expr2Context expr2() {
-			return getRuleContext(Expr2Context.class,0);
+		public ExprElseContext exprElse() {
+			return getRuleContext(ExprElseContext.class,0);
 		}
 		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -288,7 +288,7 @@ public class CodeParser extends Parser {
 				setState(51);
 				((ExprContext)_localctx).e1 = expr();
 				setState(52);
-				((ExprContext)_localctx).e2 = expr2();
+				((ExprContext)_localctx).e2 = exprElse();
 				 ((ExprContext)_localctx).v =  ((ExprContext)_localctx).e2.v == null ? new StatementIf(((ExprContext)_localctx).b1.v, ((ExprContext)_localctx).e1.v)
 				                : new StatementIfElse(((ExprContext)_localctx).b1.v, ((ExprContext)_localctx).e1.v, ((ExprContext)_localctx).e2.v); 
 				}
@@ -308,29 +308,29 @@ public class CodeParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Expr2Context extends ParserRuleContext {
+	public static class ExprElseContext extends ParserRuleContext {
 		public Expression v;
 		public ExprContext expr;
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public Expr2Context(ParserRuleContext parent, int invokingState) {
+		public ExprElseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_expr2; }
+		@Override public int getRuleIndex() { return RULE_exprElse; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeListener ) ((CodeListener)listener).enterExpr2(this);
+			if ( listener instanceof CodeListener ) ((CodeListener)listener).enterExprElse(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeListener ) ((CodeListener)listener).exitExpr2(this);
+			if ( listener instanceof CodeListener ) ((CodeListener)listener).exitExprElse(this);
 		}
 	}
 
-	public final Expr2Context expr2() throws RecognitionException {
-		Expr2Context _localctx = new Expr2Context(_ctx, getState());
-		enterRule(_localctx, 6, RULE_expr2);
+	public final ExprElseContext exprElse() throws RecognitionException {
+		ExprElseContext _localctx = new ExprElseContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_exprElse);
 		try {
 			setState(61);
 			_errHandler.sync(this);
@@ -339,14 +339,14 @@ public class CodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(57);
-				((Expr2Context)_localctx).expr = expr();
-				 ((Expr2Context)_localctx).v =  ((Expr2Context)_localctx).expr.v; 
+				((ExprElseContext)_localctx).expr = expr();
+				 ((ExprElseContext)_localctx).v =  ((ExprElseContext)_localctx).expr.v; 
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				 ((Expr2Context)_localctx).v =  null; 
+				 ((ExprElseContext)_localctx).v =  null; 
 				}
 				break;
 			}

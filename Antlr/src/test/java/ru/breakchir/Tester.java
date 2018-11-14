@@ -58,7 +58,7 @@ public class Tester {
         Program program = parser.start().v;
         if (isPrint) {
             System.out.println(test);
-            System.out.println(program.toString());
+            System.out.println(program.toPascal());
             System.out.println();
         }
     }

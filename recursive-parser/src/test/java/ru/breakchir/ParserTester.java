@@ -5,7 +5,7 @@ import java.text.ParseException;
 
 import org.junit.Test;
 
-public class Tester {
+public class ParserTester {
     private Parser parser = new Parser();
     private TreePainter painter = new TreePainter();
     private Cleaner cleaner = new Cleaner();
