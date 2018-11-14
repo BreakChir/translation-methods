@@ -57,10 +57,8 @@ public class Tester {
         CodeParser parser = new CodeParser(tokens);
         Program program = parser.start().v;
         if (isPrint) {
-            StringBuilder builder = new StringBuilder();
-            program.append(builder);
             System.out.println(test);
-            System.out.println(builder.toString());
+            System.out.println(program.toString());
             System.out.println();
         }
     }

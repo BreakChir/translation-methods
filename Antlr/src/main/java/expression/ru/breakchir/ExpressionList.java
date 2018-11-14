@@ -10,10 +10,6 @@ public class ExpressionList {
         this.expressions = list;
     }
 
-    public List<Expression> getList() {
-        return expressions;
-    }
-
     public void append(StringBuilder builder, int level) {
         for (Expression expr : expressions) {
             expr.append(builder, level, false, false);

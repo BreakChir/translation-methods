@@ -8,11 +8,11 @@ public class Program {
         this.list = list;
     }
 
-    public void append(StringBuilder builder) {
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
         builder.append("begin").append(System.lineSeparator());
-        for (Expression expr : list.getList()) {
-            expr.append(builder, 0, false, false);
-        }
+        list.append(builder, 0);
         builder.append("end.");
+        return builder.toString();
     }
 }

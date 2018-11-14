@@ -30,6 +30,6 @@ public class StatementIfElse implements Expression {
         }
         builder.append("else");
         right.append(builder, right instanceof StatementIf || right instanceof StatementIfElse ? level : level + 1,
-                false, true);
+                true, true);
     }
 }

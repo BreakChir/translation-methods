@@ -23,12 +23,12 @@ expr returns [Expression v]
                 { $v = new Print($arg.v); }
     |   ASGN VAR arg
                 { $v = new Assignment($VAR.text, $arg.v); }
-    |   IF b1 = bool_cond e1 = expr e2 = expr2
+    |   IF b1 = bool_cond e1 = expr e2 = exprElse
                 { $v = $e2.v == null ? new StatementIf($b1.v, $e1.v)
                 : new StatementIfElse($b1.v, $e1.v, $e2.v); }
     ;
 
-expr2 returns [Expression v]
+exprElse returns [Expression v]
     : expr  { $v = $expr.v; }
     |       { $v = null; }
     ;
