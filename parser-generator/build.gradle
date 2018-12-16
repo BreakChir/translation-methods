@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr "org.antlr:antlr4:4.7.1"
+    compile "org.antlr:antlr4-runtime:4.7.1"
+    testCompile 'junit:junit:4.12'
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    outputDirectory = new File("src/main/java/parser")
+}
+
+idea {
+    module {
+        sourceDirs += file("src/main/java/parser")
+    }
+}

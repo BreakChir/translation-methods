@@ -1,0 +1,40 @@
+x
+
+x [returns v : String]
+            = d xp {$v = d.v + xp.v;};
+
+xp [returns v : String]
+            = OR d xp {$v = OR + d.v + xp.v;}
+            | {$v = "";}
+            ;
+
+d [returns v : String]
+            = c dp {$v = c.v + dp.v;};
+
+dp [returns v : String]
+            = XOR c dp {$v = XOR + c.v + dp.v;}
+            | {$v = "";}
+            ;
+
+c [returns v : String]
+            = u cp {$v = u.v + cp.v;};
+
+cp [returns v : String]
+            = AND u cp {$v = AND + u.v + cp.v;}
+            | {$v = "";}
+            ;
+
+u [returns v : String]
+            = NOT u {$v = NOT + u.v;}
+            | VAR {$v = VAR;}
+            | OP x CP {$v = OP + x.v + CP;}
+            ;
+
+AND = "&";
+XOR = "^";
+OR  = "|";
+OP = "(";
+CP = ")";
+NOT = "!";
+VAR : "[a-z]+";
+WS -> "[ \n\t\r]+";

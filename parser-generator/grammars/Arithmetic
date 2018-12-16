@@ -1,0 +1,45 @@
+addSub
+
+addSub [returns v : int, isZero : boolean]
+            = mulDiv addSub_({mulDiv.v})
+              {$v = addSub_.v;}
+              {$isZero = $v == 0;}
+            ;
+
+addSub_(left : int) [returns v : int]
+            = ADD mulDiv    {int next = left + mulDiv.v;}
+              addSub_(next) {$v = addSub_.v;}
+            | SUB mulDiv    {int next = left - mulDiv.v;}
+              addSub_(next) {$v = addSub_.v;}
+            | {$v = left;}
+            ;
+
+mulDiv [returns v : int] = pow mulDiv_({pow.v}) {$v = mulDiv_.v;};
+
+mulDiv_(left : int) [returns v : int]
+            = MUL pow mulDiv_({left * pow.v}) {$v = mulDiv_.v;}
+            | DIV pow mulDiv_({left / pow.v}) {$v = mulDiv_.v;}
+            | {$v = left;}
+            ;
+
+pow [returns v : int] = unary pow_({unary.v}) {$v = pow_.v;};
+
+pow_(left : int) [returns v : int]
+            = POW unary pow_({(int) Math.pow(left, unary.v)}) {$v = pow_.v;}
+            | {$v = left;}
+            ;
+
+unary [returns v : int]
+            = OP addSub CP {$v = addSub.v;}
+            | NUM          {$v = Integer.valueOf(NUM);}
+            ;
+
+ADD = "+";
+SUB = "-";
+MUL = "*";
+DIV = "/";
+POW = "^";
+OP = "(";
+CP = ")";
+NUM : "([1-9][0-9]*)|(0)";
+WS -> "[ \n\r\t]+";

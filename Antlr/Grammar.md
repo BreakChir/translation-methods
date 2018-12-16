@@ -57,7 +57,10 @@ String | Token
 >     expr      = BEGIN set_expr
 >                 | PRINT arg
 >                 | ASGN VAR arg
->                 | IF bool_cond expr (expr)?
+>                 | IF bool_cond expr exprElse
+>
+>     exprElse  = expr
+>                 |
 >
 >     arg       = bool_cond | num | VAR
 >
